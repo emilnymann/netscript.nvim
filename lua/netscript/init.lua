@@ -55,10 +55,8 @@ function M.setup(opts)
 		callback = maybeInitWs,
 	})
 
-	vim.api.nvim_create_autocmd("BufWrite", {
-		group = group,
-		callback = evh.on_buf_write,
-	})
+	vim.api.nvim_create_autocmd("BufWrite", { group = group, callback = evh.on_buf_write })
+	vim.api.nvim_create_autocmd("BufDelete", { group = group, callback = evh.on_buf_delete })
 
 	cmd.setup()
 end
