@@ -46,6 +46,7 @@ end
 ---@param line string
 ---@return nil
 function M.handle(line)
+	---@type boolean, { error: RpcError?, id: number, result: any }
 	local ok, msg = pcall(vim.json.decode, line)
 	if not ok or type(msg) ~= "table" then
 		return
@@ -56,7 +57,20 @@ function M.handle(line)
 		return
 	end
 
+	if msg.error then
+		vim.notify(
+			string.format(
+				"netscript: error (%d) in response to <%s>:\n%s",
+				msg.error.code,
+				debug.getinfo(pending.callback, "n"),
+				msg.error.message
+			),
+			vim.log.levels.ERROR
+		)
+	end
+
 	M._pending[msg.id] = nil
+
 	pending.callback(msg.error, msg.result)
 end
 
