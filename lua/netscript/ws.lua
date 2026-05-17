@@ -5,7 +5,7 @@
 
 ---@class WsModule
 ---@field _job_id number?
----@field _running boolean
+---@field _running boolean is the websocket server currently running?
 ---@field _config WsConfig
 local M = {}
 
