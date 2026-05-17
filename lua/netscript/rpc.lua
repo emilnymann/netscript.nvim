@@ -138,7 +138,7 @@ function M.get_save_file(callback)
 	return M.request("getSaveFile", {}, callback)
 end
 
----@param callback fun(err: RpcError?, result: { hostname: string, hasAdminRights: boolean, purchasedByPlayer: boolean}?)?
+---@param callback fun(err: RpcError?, result: { hostname: string, hasAdminRights: boolean, purchasedByPlayer: boolean}[]?)?
 ---@return number id
 function M.get_all_servers(callback)
 	return M.request("getAllServers", {}, callback)
