@@ -8,6 +8,10 @@ local M = {}
 function M.on_buf_write(ev)
 	local ext = vim.fs.ext(ev.file)
 	if not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
+		utils.print(
+			"file push skipped, extension not in sync list",
+			{ ext = ext, sync_list = table.concat(conf.opts.file_sync_exts, ", ") }
+		)
 		return
 	end
 
