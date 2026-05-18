@@ -1,7 +1,9 @@
 # netscript.nvim
 
-This plugin aims to move as much of the game as
-possible into your favorite editor: Neovim.
+Write [Bitburner](https://github.com/danielyxie/bitburner) scripts from Neovim.
+
+- 🔄 Automatically pushes scripts to the game on save
+- 📄 Pull the Netscript type definitions for full LSP support without a JS environment
 
 ## Dependencies
 
