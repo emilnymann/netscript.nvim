@@ -65,7 +65,7 @@ function M.start(opts)
 	M._config = vim.tbl_extend("force", { port = 12525 }, opts or {})
 	M._running = true
 
-	utils.print("starting ws server")
+	utils.print("starting ws server", {}, vim.log.levels.INFO)
 	spawn()
 end
 

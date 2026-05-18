@@ -61,7 +61,7 @@ local function sync()
 			utils.write_file(file.filename, file.content)
 		end
 
-		utils.print("finished syncing files")
+		utils.print("finished syncing files", {}, vim.log.levels.INFO)
 	end)
 end
 
