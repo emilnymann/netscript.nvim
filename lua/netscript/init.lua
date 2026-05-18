@@ -12,12 +12,11 @@ local function maybeInitWs()
 	end
 
 	local cwd = vim.uv.cwd()
-	local root_dir = vim.fn.expand(conf.opts.root_dir)
 
 	if not cwd then
 		error("couldn't get cwd")
 	end
-	if cwd ~= root_dir and not vim.startswith(cwd, root_dir .. "/") then
+	if cwd ~= conf.opts.root_dir and not vim.startswith(cwd, conf.opts.root_dir .. "/") then
 		return
 	end
 

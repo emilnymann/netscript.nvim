@@ -14,7 +14,10 @@ local _defaults = {
 
 ---@param opts NetscriptConfig
 function M.setup(opts)
-	M.opts = vim.tbl_deep_extend("force", _defaults, opts or {})
+	local _opts = vim.tbl_deep_extend("force", _defaults, opts or {})
+	_opts.root_dir = vim.fn.expand(_opts.root_dir)
+
+	M.opts = _opts
 end
 
 return M
