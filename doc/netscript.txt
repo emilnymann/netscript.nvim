@@ -58,11 +58,10 @@ file_sync_exts ~
 ==============================================================================
 COMMANDS                                                  *netscript-commands*
 
-                                                          *:NetscriptPull*
-:NetscriptPull
-  Pulls the Netscript type definition file (`NS.d.ts`) from the game and
-  writes it to the current working directory. Requires the WebSocket
-  connection to be active.
+                                                          *:NSUpdateDefs*
+:NSUpdateDefs
+  Pulls the Netscript TypeScript definition file from the game
+  and writes it to the current working directory.
 
 ==============================================================================
 HEALTH CHECK                                              *netscript-health*

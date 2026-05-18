@@ -39,3 +39,9 @@ require("netscript").setup({
 | `port`           | `number`   | `12525`                        | Port the WebSocket server binds to                                   |
 | `root_dir`       | `string`   | `~/bitburner-files`            | Plugin only activates when the working directory is inside this path |
 | `file_sync_exts` | `string[]` | `{ "js", "ts", "jsx", "tsx" }` | File extensions included in sync operations; others are ignored      |
+
+## Commands
+
+| Command        | Description                                                         |
+| -------------- | ------------------------------------------------------------------- |
+| `NSUpdateDefs` | Pull the Netscript TypeScript definitions to the working directory. |
