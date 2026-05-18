@@ -44,5 +44,6 @@ require("netscript").setup({
 
 | Command        | Description                                                                                       |
 | -------------- | ------------------------------------------------------------------------------------------------- |
+| `NSSync`       | Sync files from bitburner to the working directory. Also executes `NSUpdateDefs`                  |
 | `NSUpdateDefs` | Pull the Netscript TypeScript definitions to the working directory.                               |
 | `NSPullFile`   | Pull the file in the current buffer from the game and overwrite the local file with its contents. |

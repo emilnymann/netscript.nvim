@@ -10,33 +10,20 @@ local function update_defs()
 	end
 
 	local def_file = ".NS.d.ts"
-	local cwd = vim.uv.cwd()
-	if not cwd then
-		error("unable to get cwd")
-	end
+	local globals_file = ".netscript-globals.d.ts"
+	local globals_contents = "export {};\ndeclare global {\n\ttype NS = import('./.NS').NS;\n}\n"
 
 	rpc.get_definition_file(function(_, contents)
-		local fd = vim.uv.fs_open(cwd .. "/" .. def_file, "w", 420)
-		if not fd then
-			error("unable to open file handle for netscript definition file")
-		end
-
-		vim.uv.fs_write(fd, contents)
-		vim.uv.fs_close(fd)
-
-		local globals_file = ".netscript-globals.d.ts"
-		local globals_contents = "export {};\ndeclare global {\n\ttype NS = import('./.NS').NS;\n}\n"
-		local gfd = vim.uv.fs_open(cwd .. "/" .. globals_file, "w", 420)
-		if not gfd then
-			error("unable to open file handle for netscript globals file")
-		end
-
-		vim.uv.fs_write(gfd, globals_contents)
-		vim.uv.fs_close(gfd)
+		utils.write_file(def_file, contents, true)
+		utils.write_file(globals_file, globals_contents, true)
 	end)
 end
 
 local function pull_file()
+	if not ws._running then
+		return
+	end
+
 	local buf_id = vim.api.nvim_get_current_buf()
 	local filename = vim.fs.basename(vim.api.nvim_buf_get_name(buf_id))
 
@@ -53,6 +40,31 @@ local function pull_file()
 	end)
 end
 
+local function sync()
+	if not ws._running then
+		return
+	end
+
+	local server = "home"
+
+	vim.api.nvim_command("NSUpdateDefs")
+	rpc.get_all_files(server, function(err, files)
+		if err then
+			return utils.print(
+				"failed to sync all files",
+				{ server = server, error = err.message },
+				vim.log.levels.ERROR
+			)
+		end
+
+		for _, file in ipairs(files) do
+			utils.write_file(file.filename, file.content)
+		end
+
+		utils.print("finished syncing files")
+	end)
+end
+
 function M.setup()
 	vim.api.nvim_create_user_command(
 		"NSUpdateDefs",
@@ -64,6 +76,12 @@ function M.setup()
 		"NSPullFile",
 		pull_file,
 		{ desc = "Pull the file in the current buffer from the game and overwrite the local file with its contents." }
+	)
+
+	vim.api.nvim_create_user_command(
+		"NSSync",
+		sync,
+		{ desc = "Sync all files from the home server to the working directory" }
 	)
 end
 

@@ -58,6 +58,10 @@ file_sync_exts ~
 ==============================================================================
 COMMANDS                                                  *netscript-commands*
 
+                                                          *:NSSync*
+:NSSync
+  Syncs files from bitburner to the working directory. Also executes :NSUpdateDefs
+
                                                           *:NSUpdateDefs*
 :NSUpdateDefs
   Pulls the Netscript TypeScript definition file from the game
