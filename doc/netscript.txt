@@ -1,0 +1,77 @@
+*netscript.txt*  Write Bitburner scripts from Neovim
+
+==============================================================================
+INTRODUCTION                                              *netscript*
+
+netscript.nvim lets you write Bitburner scripts from Neovim. It automatically
+pushes scripts to the game over WebSocket when you save, and can pull the
+Netscript type definitions for full LSP support.
+
+Requires: websocat (https://github.com/vi/websocat)
+
+==============================================================================
+SETUP                                                     *netscript-setup*
+
+                                                          *netscript.setup()*
+Call `setup()` to initialise the plugin: >lua
+
+  require("netscript").setup({
+    port           = 12525,
+    root_dir       = "~/bitburner-files",
+    file_sync_exts = { "js", "ts", "jsx", "tsx" },
+  })
+<
+With lazy.nvim, the `opts` key calls `setup()` for you: >lua
+
+  {
+    "emilnymann/netscript.nvim",
+    opts = {
+      port           = 12525,
+      root_dir       = "~/bitburner-files",
+      file_sync_exts = { "js", "ts", "jsx", "tsx" },
+    },
+  }
+<
+==============================================================================
+CONFIGURATION                                             *netscript-config*
+
+All options are optional — the defaults work out of the box.
+
+                                                          *netscript-port*
+port ~
+  Type: `number`  Default: `12525`
+  Port the WebSocket server binds to. Must match the port configured in
+  Bitburner's remote API settings.
+
+                                                          *netscript-root_dir*
+root_dir ~
+  Type: `string`  Default: `"~/bitburner-files"`
+  The plugin only activates when Neovim's working directory is inside this
+  path. Keeps the plugin dormant for unrelated projects.
+
+                                                          *netscript-file_sync_exts*
+file_sync_exts ~
+  Type: `string[]`  Default: `{ "js", "ts", "jsx", "tsx" }`
+  File extensions synced on save. Files with other extensions are silently
+  skipped.
+
+==============================================================================
+COMMANDS                                                  *netscript-commands*
+
+                                                          *:NetscriptPull*
+:NetscriptPull
+  Pulls the Netscript type definition file (`NS.d.ts`) from the game and
+  writes it to the current working directory. Requires the WebSocket
+  connection to be active.
+
+==============================================================================
+HEALTH CHECK                                              *netscript-health*
+
+Run |:checkhealth| to verify your environment: >vim
+
+  :checkhealth netscript
+<
+This checks that `websocat` is installed and accessible on your `$PATH`.
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
