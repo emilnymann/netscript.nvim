@@ -1,4 +1,5 @@
 local ws = require("netscript.ws")
+local utils = require("netscript.utils")
 
 ---@class RpcError
 ---@field code number
@@ -58,13 +59,9 @@ function M.handle(line)
 	end
 
 	if msg.error then
-		vim.notify(
-			string.format(
-				"netscript: error (%d) in response to <%s>:\n%s",
-				msg.error.code,
-				debug.getinfo(pending.callback, "n"),
-				msg.error.message
-			),
+		utils.print(
+			"error in rpc response message",
+			{ err = msg.error.message, pending_callback = debug.getinfo(pending.callback, "n").name },
 			vim.log.levels.ERROR
 		)
 	end

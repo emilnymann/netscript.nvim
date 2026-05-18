@@ -1,17 +1,10 @@
+local conf = require("netscript.conf")
 local ws = require("netscript.ws")
 local rpc = require("netscript.rpc")
-local cmd = require("netscript.cmd")
 local evh = require("netscript.event_handlers")
+local utils = require("netscript.utils")
 
 local M = {}
-
----@class NetscriptConfig
----@field port number? Websocket port (default: 12525)
----@field server string? Default Bitburner server to push to (default: "home")
-local _config = {
-	port = 12525,
-	root_dir = "~/bitburner-files",
-}
 
 local function maybeInitWs()
 	if ws._running then
@@ -19,25 +12,25 @@ local function maybeInitWs()
 	end
 
 	local cwd = vim.uv.cwd()
-	local root_dir = vim.fn.expand(_config.root_dir)
+	local root_dir = vim.fn.expand(conf.opts.root_dir)
 
-	if cwd == nil then
-		vim.notify("netscript: could not get cwd", vim.log.levels.ERROR)
-		return
+	if not cwd then
+		error("couldn't get cwd")
 	end
 	if cwd ~= root_dir and not vim.startswith(cwd, root_dir .. "/") then
 		return
 	end
 
-	vim.notify("netscript: starting websocket server", vim.log.levels.DEBUG)
+	utils.print("starting ws server")
 	ws.start({
-		port = _config.port,
+		port = conf.opts.port,
 		on_message = rpc.handle,
 	})
 end
 
+---@param opts NetscriptConfig
 function M.setup(opts)
-	_config = vim.tbl_deep_extend("force", _config, opts or {})
+	conf.setup(opts)
 	local group = vim.api.nvim_create_augroup("netscript.nvim", { clear = true })
 
 	if vim.v.vim_did_enter then
@@ -56,9 +49,6 @@ function M.setup(opts)
 	})
 
 	vim.api.nvim_create_autocmd("BufWrite", { group = group, callback = evh.on_buf_write })
-	vim.api.nvim_create_autocmd("BufDelete", { group = group, callback = evh.on_buf_delete })
-
-	cmd.setup()
 end
 
 return M

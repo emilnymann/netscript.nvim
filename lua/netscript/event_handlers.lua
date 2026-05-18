@@ -1,5 +1,5 @@
 local rpc = require("netscript.rpc")
-local ws = require("netscript.ws")
+local utils = require("netscript.utils")
 
 local M = {}
 
@@ -16,16 +16,8 @@ function M.on_buf_write(ev)
 	local lines = vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false)
 	local contents = table.concat(lines, "\n")
 
-	rpc.push_file(filename, contents, server, function(err)
-		if err ~= nil then
-			vim.notify(
-				string.format("netscript: failed to push file <%s> to server <%s>\n%s", filename, server, err.message),
-				vim.log.levels.ERROR
-			)
-			return
-		end
-
-		vim.notify(string.format("netscript: pushed file <%s> to server <%s>", filename, server), vim.log.levels.DEBUG)
+	rpc.push_file(filename, contents, server, function()
+		utils.print("pushed file to server", { file = filename, server = server })
 	end)
 end
 
