@@ -10,7 +10,7 @@ function M.setup()
 			return
 		end
 
-		local def_file = "NS.d.ts"
+		local def_file = ".NS.d.ts"
 		local cwd = vim.uv.cwd()
 		if not cwd then
 			error("unable to get cwd")
@@ -24,6 +24,16 @@ function M.setup()
 
 			vim.uv.fs_write(fd, contents)
 			vim.uv.fs_close(fd)
+
+			local globals_file = ".netscript-globals.d.ts"
+			local globals_contents = "export {};\ndeclare global {\n\ttype NS = import('./.NS').NS;\n}\n"
+			local gfd = vim.uv.fs_open(cwd .. "/" .. globals_file, "w", 420)
+			if not gfd then
+				error("unable to open file handle for netscript globals file")
+			end
+
+			vim.uv.fs_write(gfd, globals_contents)
+			vim.uv.fs_close(gfd)
 		end)
 	end, { desc = "Pull TypeScript definitions for the Netscript interface to a local file." })
 

@@ -49,15 +49,9 @@ function M.request(method, params, callback)
 	return id
 end
 
----@param line string
+---@param msg { error: RpcError?, id: number, result: any }
 ---@return nil
-function M.handle(line)
-	---@type boolean, { error: RpcError?, id: number, result: any }
-	local ok, msg = pcall(vim.json.decode, line)
-	if not ok or type(msg) ~= "table" then
-		return
-	end
-
+function M.handle(msg)
 	local pending = M._pending[msg.id]
 	if not pending then
 		return
@@ -137,7 +131,6 @@ end
 ---@param callback fun(err: RpcError?, result: string?)?
 ---@return number? id
 function M.get_definition_file(callback)
-	utils.print("sending request to get def file")
 	return M.request("getDefinitionFile", {}, callback)
 end
 

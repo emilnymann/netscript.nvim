@@ -3,7 +3,7 @@ local conf = require("netscript.conf")
 
 ---@class WsConfig
 ---@field port number?
----@field on_message fun(line: string)?
+---@field on_message fun(msg: table)?
 ---@field on_disconnect fun(code: number)?
 
 ---@class WsModule
@@ -16,20 +16,20 @@ M._job_id = nil
 M._running = false
 M._config = {}
 
-local msg_buffer = ""
-
 ---@return nil
 local function spawn()
 	local cmd = { "websocat", "--text", "-s", tostring(M._config.port) }
+	local msg_buffer = ""
 
 	M._job_id = vim.fn.jobstart(cmd, {
 		---@param data string[]
 		on_stdout = function(_, data, _)
 			for _, line in ipairs(data) do
 				msg_buffer = msg_buffer .. line
-				if line == "" then
-					M._config.on_message(msg_buffer)
-					msg_buffer = line
+				local ok, decoded = pcall(vim.json.decode, msg_buffer)
+				if ok then
+					M._config.on_message(decoded)
+					msg_buffer = ""
 				end
 			end
 		end,
