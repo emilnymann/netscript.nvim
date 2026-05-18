@@ -42,6 +42,7 @@ require("netscript").setup({
 
 ## Commands
 
-| Command        | Description                                                         |
-| -------------- | ------------------------------------------------------------------- |
-| `NSUpdateDefs` | Pull the Netscript TypeScript definitions to the working directory. |
+| Command        | Description                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| `NSUpdateDefs` | Pull the Netscript TypeScript definitions to the working directory.                               |
+| `NSPullFile`   | Pull the file in the current buffer from the game and overwrite the local file with its contents. |

@@ -63,6 +63,11 @@ COMMANDS                                                  *netscript-commands*
   Pulls the Netscript TypeScript definition file from the game
   and writes it to the current working directory.
 
+                                                          *:NSPullFile*
+:NSPullFile
+  Pulls the file open in the current buffer from the game (server: "home")
+  and overwrites the buffer's local contents with the game's version.
+
 ==============================================================================
 HEALTH CHECK                                              *netscript-health*
 
