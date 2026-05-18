@@ -5,6 +5,8 @@ local ws = require("netscript.ws")
 
 local M = {}
 
+local push_files_ignore = { "NS.d.ts", "netscript-globals.d.ts" }
+
 function M.setup()
 	M._group = vim.api.nvim_create_augroup("netscript.nvim", { clear = true })
 
@@ -23,9 +25,9 @@ function M.setup()
 			end
 
 			local ext = vim.fs.ext(ev.file)
-			if not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
+			if vim.tbl_contains(push_files_ignore, ev.file) or not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
 				utils.print(
-					"file push skipped, extension not in sync list",
+					"file push skipped, file in ignore list or extension not in sync list",
 					{ ext = ext, sync_list = table.concat(conf.opts.file_sync_exts, ", ") }
 				)
 				return
