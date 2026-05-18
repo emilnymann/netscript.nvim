@@ -2,7 +2,8 @@
 
 Write [Bitburner](https://store.steampowered.com/app/1812820/Bitburner/) scripts from Neovim.
 
-- 🔄 Automatically pushes scripts to the game on save
+- ⬇️ Pull all files from the game into a configurable working directory
+- 💾 Automatically pushes scripts to the game on save
 - 📄 Pull the Netscript type definitions for full LSP support without a JS environment
 
 ## Dependencies
