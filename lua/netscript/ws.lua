@@ -1,4 +1,5 @@
 local utils = require("netscript.utils")
+local conf = require("netscript.conf")
 
 ---@class WsConfig
 ---@field port number?
@@ -51,8 +52,20 @@ end
 ---@param opts WsConfig?
 ---@return nil
 function M.start(opts)
+	if M._running then
+		return
+	end
+
+	local cwd = vim.uv.cwd()
+
+	if not cwd or cwd ~= conf.opts.root_dir then
+		return
+	end
+
 	M._config = vim.tbl_extend("force", { port = 12525 }, opts or {})
 	M._running = true
+
+	utils.print("starting ws server")
 	spawn()
 end
 
