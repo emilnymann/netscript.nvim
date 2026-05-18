@@ -1,3 +1,5 @@
+local utils = require("netscript.utils")
+
 ---@class WsConfig
 ---@field port number?
 ---@field on_message fun(line: string)?
@@ -13,6 +15,8 @@ M._job_id = nil
 M._running = false
 M._config = {}
 
+local msg_buffer = ""
+
 ---@return nil
 local function spawn()
 	local cmd = { "websocat", "--text", "-s", tostring(M._config.port) }
@@ -21,8 +25,10 @@ local function spawn()
 		---@param data string[]
 		on_stdout = function(_, data, _)
 			for _, line in ipairs(data) do
-				if line ~= "" and M._config.on_message then
-					M._config.on_message(line)
+				msg_buffer = msg_buffer .. line
+				if line == "" then
+					M._config.on_message(msg_buffer)
+					msg_buffer = line
 				end
 			end
 		end,

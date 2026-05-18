@@ -63,14 +63,6 @@ function M.handle(line)
 		return
 	end
 
-	if msg.error then
-		utils.print(
-			"error in rpc response message",
-			{ err = msg.error.message, pending_callback = debug.getinfo(pending.callback, "n").name },
-			vim.log.levels.ERROR
-		)
-	end
-
 	M._pending[msg.id] = nil
 
 	pending.callback(msg.error, msg.result)
@@ -145,6 +137,7 @@ end
 ---@param callback fun(err: RpcError?, result: string?)?
 ---@return number? id
 function M.get_definition_file(callback)
+	utils.print("sending request to get def file")
 	return M.request("getDefinitionFile", {}, callback)
 end
 
