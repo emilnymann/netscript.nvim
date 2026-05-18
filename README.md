@@ -1,6 +1,6 @@
 # netscript.nvim
 
-Write [Bitburner](https://github.com/danielyxie/bitburner) scripts from Neovim.
+Write [Bitburner](https://store.steampowered.com/app/1812820/Bitburner/) scripts from Neovim.
 
 - 🔄 Automatically pushes scripts to the game on save
 - 📄 Pull the Netscript type definitions for full LSP support without a JS environment
