@@ -1,10 +1,16 @@
 local rpc = require("netscript.rpc")
 local utils = require("netscript.utils")
+local conf = require("netscript.conf")
 
 local M = {}
 
 ---@param ev vim.api.keyset.create_autocmd.callback_args
 function M.on_buf_write(ev)
+	local ext = vim.fs.ext(ev.file)
+	if not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
+		return
+	end
+
 	local relative_dir = vim.fn.fnamemodify(ev.file, ":~:.:h")
 
 	local server = "home"
