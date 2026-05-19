@@ -2,6 +2,7 @@ local rpc = require("netscript.rpc")
 local utils = require("netscript.utils")
 local conf = require("netscript.conf")
 local ws = require("netscript.ws")
+local cache = require("netscript.cache")
 
 local M = {}
 
@@ -39,6 +40,29 @@ function M.setup()
 
 			rpc.push_file(filename, contents, "home", function()
 				utils.print("pushed file to server", { file = filename, server = "home" })
+				rpc.calculate_ram(filename, "home", function(_, result)
+					cache.buf_ram[ev.buf] = result
+				end)
+			end)
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("BufAdd", {
+		group = M._group,
+		callback = function(ev)
+			local filename = ev.file
+			if not ws._running or not filename then
+				return
+			end
+
+			filename = vim.fs.basename(filename)
+
+			rpc.calculate_ram(filename, "home", function(err, result)
+				if err then
+					return
+				end
+
+				cache.buf_ram[ev.buf] = result
 			end)
 		end,
 	})
