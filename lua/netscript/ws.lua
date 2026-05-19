@@ -9,16 +9,18 @@ local conf = require("netscript.conf")
 ---@class WsModule
 ---@field _job_id number?
 ---@field _running boolean is the websocket server currently running?
+---@field _client_connected boolean is a client currently connected?
 ---@field _config WsConfig
 local M = {}
 
 M._job_id = nil
 M._running = false
+M._client_connected = false
 M._config = {}
 
 ---@return nil
 local function spawn()
-	local cmd = { "websocat", "--text", "-s", tostring(M._config.port) }
+	local cmd = { "websocat", "--text", "-v", "-s", tostring(M._config.port) }
 	local msg_buffer = ""
 
 	M._job_id = vim.fn.jobstart(cmd, {
@@ -34,11 +36,23 @@ local function spawn()
 			end
 		end,
 
-		on_stderr = function(_, _, _) end,
+		---@param data string[]
+		on_stderr = function(_, data, _)
+			for _, line in ipairs(data) do
+				if line:find("net_peer") then
+					utils.print("ws client connected")
+					M._client_connected = true
+				elseif line:find("ws_peer") then
+					utils.print("ws client disconnected")
+					M._client_connected = false
+				end
+			end
+		end,
 
 		---@param code number
 		on_exit = function(_, code, _)
 			M._job_id = nil
+			M._client_connected = false
 			if M._config.on_disconnect then
 				M._config.on_disconnect(code)
 			end
