@@ -5,6 +5,7 @@ Write [Bitburner](https://store.steampowered.com/app/1812820/Bitburner/) scripts
 - ⬇️ Pull all files from the game into a configurable working directory
 - 💾 Automatically pushes scripts to the game on save
 - 📄 Pull the Netscript type definitions for full LSP support without a JS environment
+- 🔋 Display the RAM usage of the current script and the Bitburner connection status on your statusline
 
 ## Dependencies
 
@@ -40,6 +41,29 @@ require("netscript").setup({
 | `port`           | `number`   | `12525`                        | Port the WebSocket server binds to                                   |
 | `root_dir`       | `string`   | `~/bitburner-files`            | Plugin only activates when the working directory is inside this path |
 | `file_sync_exts` | `string[]` | `{ "js", "ts", "jsx", "tsx" }` | File extensions included in sync operations; others are ignored      |
+
+## Statusline
+
+Two functions are available for use in your statusline.
+They will always return an empty string when they are not applicable, which hides them.
+
+| Function                                       | Returns                                                                                                |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `require("netscript.statusline").ns_status()`  | `"NS ✔️"` when a client is connected, `"NS ❌"` when the server is running but no client is connected. |
+| `require("netscript.statusline").buffer_ram()` | `"RAM: X.X GB"` for the current buffer's script RAM cost.                                              |
+
+Example with [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim):
+
+```lua
+require("lualine").setup({
+  sections = {
+    lualine_x = {
+      { require("netscript.statusline").buffer_ram },
+      { require("netscript.statusline").ns_status },
+    },
+  },
+})
+```
 
 ## Commands
 
