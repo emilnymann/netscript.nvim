@@ -56,6 +56,33 @@ file_sync_exts ~
   skipped.
 
 ==============================================================================
+STATUSLINE                                                *netscript-statusline*
+
+Two functions are available for use in your statusline.
+They will always return an empty string when they are not applicable, which
+hides them.
+
+                                              *netscript.statusline.ns_status()*
+`require("netscript.statusline").ns_status()`
+  Returns `"NS ✔️"` when a client is connected, `"NS ❌"` when the server is
+  running but no client is connected.
+
+                                             *netscript.statusline.buffer_ram()*
+`require("netscript.statusline").buffer_ram()`
+  Returns `"RAM: X.X GB"` for the current buffer's script RAM cost.
+
+Example with lualine.nvim: >lua
+
+  require("lualine").setup({
+    sections = {
+      lualine_x = {
+        { require("netscript.statusline").buffer_ram },
+        { require("netscript.statusline").ns_status },
+      },
+    },
+  })
+<
+==============================================================================
 COMMANDS                                                  *netscript-commands*
 
                                                           *:NSSync*
