@@ -6,7 +6,7 @@ local cache = require("netscript.cache")
 
 local M = {}
 
-local push_files_ignore = { "NS.d.ts", "netscript-globals.d.ts" }
+local push_files_ignore = { "NS.d.ts" }
 
 function M.setup()
 	M._group = vim.api.nvim_create_augroup("netscript.nvim", { clear = true })
