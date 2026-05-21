@@ -10,6 +10,16 @@ Write [Bitburner](https://store.steampowered.com/app/1812820/Bitburner/) scripts
 - 📄 Pull the Netscript type definitions for full LSP support without a JS environment
 - 🔋 Display the RAM usage of the current script and the Bitburner connection status on your statusline
 
+<!--toc:start-->
+
+- [Dependencies](#dependencies)
+- [Configuration](#configuration)
+  - [lazy.nvim](#lazynvim)
+  - [Setup](#setup)
+- [Statusline](#statusline)
+- [Commands](#commands)
+<!--toc:end-->
+
 ## Dependencies
 
 - `websocat`
