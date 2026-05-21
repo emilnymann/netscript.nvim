@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ES2015"
+    ]
+  },
+  "include": [
+    "./NS.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
+}

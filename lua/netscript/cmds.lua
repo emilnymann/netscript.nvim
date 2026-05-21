@@ -9,10 +9,19 @@ local function update_defs()
 		return
 	end
 
-	local def_file = "NS.d.ts"
+	local tsc_template_path = assert(
+		vim.api.nvim_get_runtime_file("assets/tsconfig.template.json", false)[1],
+		"tsconfig template asset not found"
+	)
+
+	local def_file_name = "NS.d.ts"
+	local tsc_file_path = vim.fn.getcwd() .. "/tsconfig.json"
 
 	rpc.get_definition_file(function(_, contents)
-		utils.write_file(def_file, contents, true)
+		utils.write_file(def_file_name, contents:gsub("export ", ""), true)
+		vim.uv.fs_copyfile(tsc_template_path, tsc_file_path, function(err)
+			assert(not err, "failed to copy tsconfig to cwd")
+		end)
 	end)
 end
 
