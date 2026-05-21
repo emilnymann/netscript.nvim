@@ -1,5 +1,8 @@
 # netscript.nvim
 
+[![Release](https://img.shields.io/github/v/release/emilnymann/netscript.nvim?style=for-the-badge)](https://github.com/emilnymann/netscript.nvim/releases)
+[![License](https://img.shields.io/github/license/emilnymann/netscript.nvim?style=for-the-badge)](https://github.com/emilnymann/netscript.nvim/releases)
+
 Write [Bitburner](https://store.steampowered.com/app/1812820/Bitburner/) scripts from Neovim.
 
 - ⬇️ Pull all files from the game into a configurable working directory
