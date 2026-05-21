@@ -10,12 +10,9 @@ local function update_defs()
 	end
 
 	local def_file = "NS.d.ts"
-	local globals_file = "netscript-globals.d.ts"
-	local globals_contents = "export {};\ndeclare global {\n\ttype NS = import('./NS').NS;\n}\n"
 
 	rpc.get_definition_file(function(_, contents)
 		utils.write_file(def_file, contents, true)
-		utils.write_file(globals_file, globals_contents, true)
 	end)
 end
 
