@@ -34,14 +34,7 @@ local function pull_file()
 	local filename = vim.fs.basename(vim.api.nvim_buf_get_name(buf_id))
 
 	rpc.get_file(filename, "home", function(err, contents)
-		if err then
-			return utils.print(
-				"failed to pull file",
-				{ filename, server = "home", error = err.message },
-				vim.log.levels.ERROR
-			)
-		end
-
+		assert(not err, string.format("failed to pull file %s: %s", filename, err.message))
 		vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, vim.split(contents, "\n"))
 	end)
 end
@@ -55,19 +48,13 @@ local function sync()
 
 	vim.api.nvim_command("NSUpdateDefs")
 	rpc.get_all_files(server, function(err, files)
-		if err then
-			return utils.print(
-				"failed to sync all files",
-				{ server = server, error = err.message },
-				vim.log.levels.ERROR
-			)
-		end
+		assert(not err, err and string.format("failed to get all files: %s", err.message))
 
 		for _, file in ipairs(files) do
 			utils.write_file(file.filename, file.content)
 		end
 
-		utils.print("finished syncing files", {}, vim.log.levels.INFO)
+		vim.notify("Finished syncing files.", vim.log.levels.INFO)
 	end)
 end
 

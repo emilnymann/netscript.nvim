@@ -27,10 +27,6 @@ function M.setup()
 
 			local ext = vim.fs.ext(ev.file)
 			if vim.tbl_contains(push_files_ignore, ev.file) or not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
-				utils.print(
-					"file push skipped, file in ignore list or extension not in sync list",
-					{ ext = ext, sync_list = table.concat(conf.opts.file_sync_exts, ", ") }
-				)
 				return
 			end
 
@@ -38,9 +34,13 @@ function M.setup()
 			local lines = vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false)
 			local contents = table.concat(lines, "\n")
 
-			rpc.push_file(filename, contents, "home", function()
-				utils.print("pushed file to server", { file = filename, server = "home" })
-				rpc.calculate_ram(filename, "home", function(_, result)
+			rpc.push_file(filename, contents, "home", function(err)
+				assert(not err, err and string.format("failed to push file '%s': %s", filename, err.message))
+				rpc.calculate_ram(filename, "home", function(err, result)
+					assert(
+						not err,
+						err and string.format("failed to calculate RAM for file '%s': %s", filename, err.message)
+					)
 					cache.buf_ram[ev.buf] = result
 				end)
 			end)

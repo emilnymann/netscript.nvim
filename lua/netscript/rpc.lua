@@ -27,10 +27,7 @@ M._pending = {}
 ---@param callback fun(err: RpcError?, result: any)?
 ---@return number? message id, nil if message was skipped
 function M.request(method, params, callback)
-	if not ws._running then
-		utils.print("ws not running, skipping request", { method = method })
-		return nil
-	end
+	assert(ws._running, "unable to send request because websocket server is not running")
 
 	local id = M._next_id
 	M._next_id = M._next_id + 1

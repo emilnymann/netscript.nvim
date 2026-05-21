@@ -40,10 +40,10 @@ local function spawn()
 		on_stderr = function(_, data, _)
 			for _, line in ipairs(data) do
 				if line:find("net_peer") then
-					utils.print("ws client connected")
+					vim.notify("Bitburner client connected.", vim.log.levels.INFO)
 					M._client_connected = true
 				elseif line:find("ws_peer") then
-					utils.print("ws client disconnected")
+					vim.notify("Bitburner client disconnected.", vim.log.levels.INFO)
 					M._client_connected = false
 				end
 			end
@@ -79,7 +79,7 @@ function M.start(opts)
 	M._config = vim.tbl_extend("force", { port = 12525 }, opts or {})
 	M._running = true
 
-	utils.print("starting ws server", {}, vim.log.levels.INFO)
+	vim.notify("Netscript websocket client starting...", vim.log.levels.INFO)
 	spawn()
 end
 
