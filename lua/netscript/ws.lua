@@ -72,7 +72,7 @@ function M.start(opts)
 
 	local cwd = vim.uv.cwd()
 
-	if not cwd or string.find(cwd, conf.opts.root_dir) == nil then
+	if not cwd or not string.find(cwd, conf.opts.root_dir, 1, true) then
 		return
 	end
 

@@ -10,6 +10,7 @@ local _defaults = {
 	port = 12525,
 	root_dir = "~/bitburner-files",
 	file_sync_exts = { "js", "ts", "jsx", "tsx" },
+	bitburner_dir = "",
 }
 
 ---@param opts NetscriptConfig

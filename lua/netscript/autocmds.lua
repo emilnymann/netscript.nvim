@@ -26,21 +26,32 @@ function M.setup()
 			end
 
 			local ext = vim.fs.ext(ev.file)
-			if vim.tbl_contains(push_files_ignore, ev.file) or not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
+
+			if
+				vim.tbl_contains(push_files_ignore, vim.fs.basename(ev.file))
+				or not vim.tbl_contains(conf.opts.file_sync_exts, ext)
+			then
 				return
 			end
 
-			local filename = vim.fn.expand("%:p"):gsub(conf.opts.root_dir, ""):gsub("\\", "/")
+			local filename = utils.get_game_filename(ev.file)
+
+			if not filename then
+				return
+			end
+
 			local lines = vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false)
 			local contents = table.concat(lines, "\n")
 
 			rpc.push_file(filename, contents, "home", function(err)
 				assert(not err, err and string.format("failed to push file '%s': %s", filename, err.message))
+
 				rpc.calculate_ram(filename, "home", function(err, result)
 					assert(
 						not err,
 						err and string.format("failed to calculate RAM for file '%s': %s", filename, err.message)
 					)
+
 					cache.buf_ram[ev.buf] = result
 				end)
 			end)
@@ -50,12 +61,20 @@ function M.setup()
 	vim.api.nvim_create_autocmd("BufAdd", {
 		group = M._group,
 		callback = function(ev)
-			local filename = ev.file
-			if not ws._running or not filename then
+			if not ws._running or ev.file == "" then
 				return
 			end
 
-			filename = vim.fs.basename(filename)
+			local filename = utils.get_game_filename(ev.file)
+
+			if not filename then
+				return
+			end
+
+			local ext = vim.fs.ext(filename)
+			if not vim.tbl_contains(conf.opts.file_sync_exts, ext) then
+				return
+			end
 
 			rpc.calculate_ram(filename, "home", function(err, result)
 				if err then

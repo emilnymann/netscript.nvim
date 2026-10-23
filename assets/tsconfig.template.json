@@ -2,10 +2,13 @@
   "compilerOptions": {
     "lib": [
       "ES2015"
-    ]
+    ],
+    "baseUrl": ".",
+    "allowJs": true
   },
   "include": [
     "./NS.d.ts",
+    "./**/*.js",
     "./**/*.ts",
     "./**/*.tsx"
   ]
