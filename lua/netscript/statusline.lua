@@ -20,7 +20,7 @@ function M.buffer_ram()
 		return ""
 	end
 
-	return string.format("RAM: %.1f GB", ram_usage)
+	return string.format("RAM: %.2f GB", ram_usage)
 end
 
 return M
